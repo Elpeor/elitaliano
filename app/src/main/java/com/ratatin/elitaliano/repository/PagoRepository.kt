@@ -1,8 +1,9 @@
 package com.ratatin.elitaliano.repository
 
-import com.ratatin.elitaliano.data.usuario.Usuario
+import com.ratatin.elitaliano.data.usuario.UsuarioLocal
 import com.ratatin.elitaliano.dataSQL.Pago
 import com.ratatin.elitaliano.dataSQL.Producto
+import com.ratatin.elitaliano.dataSQL.Usuario
 import com.ratatin.elitaliano.remote.RetrofitInstance
 import java.sql.Date
 
@@ -12,7 +13,7 @@ class PagoRepository {
         return RetrofitInstance.api.getPagos()
     }
 
-    suspend fun getPagosByIdUsuario(id: Int): List<Pago>{
+    suspend fun getPagosByIdUsuario(id: Long?): List<Pago>{
         return RetrofitInstance.api.getPagosByIdUsuario(id)
     }
 

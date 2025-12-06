@@ -49,7 +49,7 @@ class PagoViewModel(val pagoRepo: PagoRepository) : ViewModel() {
         }
     }
 
-    fun getPagosByIdUser(idUsuario: Int) {
+    fun getPagosByIdUser(idUsuario: Long?) {
         viewModelScope.launch {
             _pagoUserList.value = pagoRepo.getPagosByIdUsuario(idUsuario)
             Log.d("test", "en pagoviewmodel: ${_pagoUserList.value}")

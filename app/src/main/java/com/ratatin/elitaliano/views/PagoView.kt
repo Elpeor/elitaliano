@@ -29,7 +29,7 @@ import com.ratatin.elitaliano.viewmodels.PagoViewModelFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PagoView(
-    userId: Int,
+    userId: Long?,
 ) {
     Log.d("test", "$userId")
     val context = LocalContext.current

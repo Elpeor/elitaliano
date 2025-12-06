@@ -1,7 +1,8 @@
 package com.ratatin.elitaliano.remote
-import com.ratatin.elitaliano.data.usuario.Usuario
+import com.ratatin.elitaliano.data.usuario.UsuarioLocal
 import com.ratatin.elitaliano.dataSQL.Pago
 import com.ratatin.elitaliano.dataSQL.Producto
+import com.ratatin.elitaliano.dataSQL.Usuario
 import retrofit2.http.*
 import retrofit2.http.GET
 
@@ -27,13 +28,16 @@ interface ApiService {
     suspend fun getUsuarioByEmail(@Path("email", encoded = true) email: String): Usuario
 
     @GET("/api/v1/usuarios/{id}")
-    suspend fun getUsuarioById(@Path("id", encoded = true) idUsuario: Int): Usuario
+    suspend fun getUsuarioById(@Path("id", encoded = true) idUsuario: Long?): Usuario
+
+    @POST("/api/v1/usuarios/crear")
+    suspend fun createUsuarios(@Body usuario: Usuario) : Usuario
 
     @GET("/api/v1/pagos")
     suspend fun getPagos(): List<Pago>
 
     @GET("/api/v1/pagos/user/{id}")
-    suspend fun getPagosByIdUsuario(@Path("id", encoded = true) idUsuario: Int): List<Pago>
+    suspend fun getPagosByIdUsuario(@Path("id", encoded = true) idUsuario: Long?): List<Pago>
 
     @POST("/api/v1/pagos/crear")
     suspend fun createPagos(@Body pago: Pago): Pago

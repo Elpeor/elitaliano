@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.ratatin.elitaliano.views.LoginView
 import com.ratatin.elitaliano.views.MenuShellView
+import com.ratatin.elitaliano.views.RegistroView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,10 +28,16 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = Route.Login.route
                 ) {
+                    composable(Route.Registro.route) {
+                        RegistroView(
+                            onBackToLogin = { navController.popBackStack() },
+                            onUserCreated = { id -> navController.navigate("${Route.MenuShell.route}/$id") }
+                        )
+                    }
 
                     composable(Route.Login.route) {
-                        LoginView(
-                            onStartClick = { userId: Int ->
+                        LoginView(navController,
+                            onStartClick = { userId: Long? ->
                                 navController.navigate(
                                     "${Route.MenuShell.route}/$userId"
                                 )
@@ -41,12 +48,12 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = "${Route.MenuShell.route}/{userId}",
                         arguments = listOf(
-                            navArgument("userId") { type = NavType.IntType }
+                            navArgument("userId") { type = NavType.LongType }
                         )
                     ) { backStackEntry ->
 
-                        val userId: Int =
-                            backStackEntry.arguments!!.getInt("userId")
+                        val userId: Long? =
+                            backStackEntry.arguments!!.getLong("userId")
 
                         MenuShellView(
                             userId = userId,

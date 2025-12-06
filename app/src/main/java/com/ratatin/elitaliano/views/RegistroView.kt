@@ -1,11 +1,12 @@
 package com.ratatin.elitaliano.views
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -13,7 +14,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,32 +28,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import com.ratatin.elitaliano.R
-import com.ratatin.elitaliano.viewmodels.LoginViewModel
-import com.ratatin.elitaliano.viewmodels.LoginViewModelFactory
+import com.ratatin.elitaliano.viewmodels.RegistroViewModel
+import com.ratatin.elitaliano.viewmodels.RegistroViewModelFactory
+import kotlin.let
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginView(
-    navController: NavHostController,
-    onStartClick: (Long?) -> Unit
+fun RegistroView(
+    onBackToLogin: () -> Unit,
+    onUserCreated: (Long?) -> Unit
 ) {
-    val viewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory()
+    val context = LocalContext.current
+
+    val viewModel: RegistroViewModel = viewModel(
+        factory = RegistroViewModelFactory(context)
     )
 
+    var nombre by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
-    var contra by remember { mutableStateOf("") }
-
+    var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    val error by viewModel.error.observeAsState(false)
+    val error by viewModel.error.observeAsState("")
+    val usuarioCreado by viewModel.registroExitoso.observeAsState(null)
+
+    // Si el usuario fue creado, devolvemos el id
+    usuarioCreado?.let { id ->
+        if (id > 0) {
+            onUserCreated(id)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -59,12 +70,16 @@ fun LoginView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.italianologo),
-            contentDescription = "Logo de El Italiano",
-            modifier = Modifier
-                .size(180.dp)
-                .padding(bottom = 24.dp)
+
+        Text("Crear Cuenta", style = MaterialTheme.typography.headlineMedium)
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        TextField(
+            value = nombre,
+            onValueChange = { nombre = it },
+            label = { Text("Nombre") },
+            singleLine = true
         )
 
         TextField(
@@ -75,39 +90,40 @@ fun LoginView(
         )
 
         TextField(
-            value = contra,
-            onValueChange = { contra = it },
+            value = password,
+            onValueChange = { password = it },
             label = { Text("Contraseña") },
             singleLine = true,
             visualTransformation = if (passwordVisible)
                 VisualTransformation.None
-            else
-                PasswordVisualTransformation(),
+            else PasswordVisualTransformation(),
             trailingIcon = {
-                val image = if (passwordVisible) Icons.Default.Visibility
-                else Icons.Default.VisibilityOff
-
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(image, contentDescription = "Mostrar contraseña")
+                    Icon(
+                        imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                        contentDescription = "Mostrar contraseña"
+                    )
                 }
             }
         )
 
-        if (error) {
-            Text("Usuario o contraseña incorrectos", color = Color.Red)
+        if (error.isNotEmpty()) {
+            Text(error, color = Color.Red, modifier = Modifier.padding(top = 12.dp))
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
-                viewModel.login(correo, contra) { usuario ->
-                    onStartClick(usuario.idUsuario)
-                }
-            }
+                viewModel.registrarUsuario(nombre, correo, password)
+            },
+            modifier = Modifier.fillMaxWidth(0.8f)
         ) {
-            Text("Iniciar sesión")
+            Text("Registrar")
         }
-        Button(onClick = { navController.navigate("registro") }) {
-            Text("Crear cuenta nueva")
+
+        TextButton(onClick = onBackToLogin) {
+            Text("¿Ya tienes cuenta? Iniciar sesión")
         }
     }
 }

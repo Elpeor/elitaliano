@@ -36,7 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.ratatin.elitaliano.data.usuario.Usuario
+import com.ratatin.elitaliano.data.usuario.UsuarioLocal
+import com.ratatin.elitaliano.dataSQL.Usuario
 import com.ratatin.elitaliano.viewmodels.PagoViewModel
 import com.ratatin.elitaliano.viewmodels.PagoViewModelFactory
 import com.ratatin.elitaliano.viewmodels.ProductosViewModel

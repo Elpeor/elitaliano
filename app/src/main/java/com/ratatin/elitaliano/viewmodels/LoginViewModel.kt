@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ratatin.elitaliano.data.usuario.Usuario
+import com.ratatin.elitaliano.data.usuario.UsuarioLocal
+import com.ratatin.elitaliano.dataSQL.Usuario
 import com.ratatin.elitaliano.repository.UsuarioRepository
 import kotlinx.coroutines.launch
 
@@ -54,7 +55,7 @@ class LoginViewModel(private val usuarioRepo: UsuarioRepository): ViewModel(){
         }
     }
 
-    fun getByIdUser(idUsuario: Int) {
+    fun getByIdUser(idUsuario: Long?) {
         viewModelScope.launch {
             _gettedUser.value = usuarioRepo.getUsuarioById(idUsuario)
         }

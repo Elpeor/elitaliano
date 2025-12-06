@@ -1,6 +1,6 @@
 package com.ratatin.elitaliano.dataSQL
 
-import com.ratatin.elitaliano.data.usuario.Usuario
+import com.ratatin.elitaliano.data.usuario.UsuarioLocal
 import java.sql.Date
 
 data class Pago(

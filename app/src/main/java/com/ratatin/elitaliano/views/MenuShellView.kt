@@ -27,7 +27,7 @@ import com.ratatin.elitaliano.viewmodels.ProductosViewModelFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuShellView(
-    userId: Int,
+    userId: Long?,
     navController: NavHostController,
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -39,7 +39,7 @@ fun MenuShellView(
         factory = ProductosViewModelFactory(context)
     )
     val loginViewModel : LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(context)
+        factory = LoginViewModelFactory()
     )
     LaunchedEffect(userId) {
         loginViewModel.getByIdUser(userId)

@@ -7,14 +7,14 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.ratatin.elitaliano.data.producto.ProductoLocal
 import com.ratatin.elitaliano.data.producto.ProductoDao
-import com.ratatin.elitaliano.data.usuario.Usuario
+import com.ratatin.elitaliano.data.usuario.UsuarioLocal
 import com.ratatin.elitaliano.data.usuario.UsuarioDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Database(
-    entities = [ProductoLocal::class, Usuario::class],
+    entities = [ProductoLocal::class, UsuarioLocal::class],
     version = 1,
     exportSchema = false
 )
