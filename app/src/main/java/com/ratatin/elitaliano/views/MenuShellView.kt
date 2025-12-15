@@ -169,6 +169,7 @@ fun MenuShellView(
                 composable(Route.Info.route) { InfoView() }
                 composable(Route.Panel.route) { PanelView(navController = innerNavController) }
                 composable(Route.ProductosPanel.route) { ProductosPanelView(productosViewModel) }
+                composable(Route.UsuariosPanel.route) { UsuariosPanelView() }
             }
         }
     }

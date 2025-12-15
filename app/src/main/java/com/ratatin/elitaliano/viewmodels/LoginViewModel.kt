@@ -10,7 +10,7 @@ import com.ratatin.elitaliano.dataSQL.Usuario
 import com.ratatin.elitaliano.repository.UsuarioRepository
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val usuarioRepo: UsuarioRepository): ViewModel(){
+class LoginViewModel(val usuarioRepo: UsuarioRepository): ViewModel(){
 
     private val _usuarioList = MutableLiveData<List<Usuario>>(emptyList())
 
@@ -29,7 +29,7 @@ class LoginViewModel(private val usuarioRepo: UsuarioRepository): ViewModel(){
         }
     }
 
-    private fun fetchUsuarios() {
+    fun fetchUsuarios() {
         viewModelScope.launch {
             try {
                 _usuarioList.value = usuarioRepo.getUsuarios()

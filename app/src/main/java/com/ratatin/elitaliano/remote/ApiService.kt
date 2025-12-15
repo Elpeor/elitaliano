@@ -33,6 +33,12 @@ interface ApiService {
     @POST("/api/v1/usuarios/crear")
     suspend fun createUsuarios(@Body usuario: Usuario) : Usuario
 
+    @PUT("/api/v1/usuarios/{id}")
+    suspend fun updateUsuario(@Path("id", encoded = true) id : Long?, @Body usuario: Usuario)
+
+    @DELETE("/api/v1/usuarios/eliminar/{id}")
+    suspend fun deleteUsuarioPorId(@Path("id", encoded = true) id : Long?)
+
     @GET("/api/v1/pagos")
     suspend fun getPagos(): List<Pago>
 

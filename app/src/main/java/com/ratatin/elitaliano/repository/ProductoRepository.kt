@@ -8,6 +8,7 @@ class ProductoRepository(private val dao: ProductoDao){
 
 
     suspend fun agregar(nombre:String, descripcion:String, precio: Double, categoria: String, imagen: String) {
+        categoria.lowercase()
         require(nombre.isNotBlank()) { "El nombre no puede estar vacío" }
         require(descripcion.isNotBlank()) { "La descripción no puede estar vacía" }
         require(precio >= 0){"El precio no puede ser negativo"}
