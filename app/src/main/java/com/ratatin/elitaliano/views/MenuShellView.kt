@@ -165,10 +165,10 @@ fun MenuShellView(
                 composable(Route.Carro.route) { CarroView(productosViewModel, usuario ) }
                 composable(Route.Productos.route) { ProductosView(navController = innerNavController, productosViewModel) }
                 composable(Route.Principal.route) { PrincipalView() }
-                Log.d("test", "$userId")
                 composable ( Route.Pago.route ) {PagoView(userId) }
                 composable(Route.Info.route) { InfoView() }
-                composable(Route.Panel.route) { PanelView(productosViewModel) }
+                composable(Route.Panel.route) { PanelView(navController = innerNavController) }
+                composable(Route.ProductosPanel.route) { ProductosPanelView(productosViewModel) }
             }
         }
     }

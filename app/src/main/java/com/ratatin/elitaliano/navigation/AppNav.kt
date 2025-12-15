@@ -9,8 +9,8 @@ sealed class Route(val route: String) {
     data object Principal : Route("principal")
     data object Pago : Route("pago")
     data object Info : Route("info")
-
     data object Panel : Route("panel")
+    data object ProductosPanel : Route("productosPanel")
 
 
 }
