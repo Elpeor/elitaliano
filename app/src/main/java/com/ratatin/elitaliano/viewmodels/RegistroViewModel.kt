@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.ratatin.elitaliano.repository.UsuarioRepository
 import kotlinx.coroutines.launch
 
-class RegistroViewModel(private val context: Context) : ViewModel() {
+class RegistroViewModel() : ViewModel() {
 
     private val repo = UsuarioRepository()
 
@@ -43,10 +43,8 @@ class RegistroViewModel(private val context: Context) : ViewModel() {
     }
 }
 
-class RegistroViewModelFactory(
-    private val context: Context
-) : ViewModelProvider.Factory {
+class RegistroViewModelFactory() : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return RegistroViewModel(context) as T
+        return RegistroViewModel() as T
     }
 }

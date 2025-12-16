@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -127,7 +128,7 @@ fun UsuariosPanelView(
                                 viewModel.fetchUsuarios()
                             }
                         }else {
-
+                            if(!viewModel.emailInList(usuario.email)){
                             viewModel.usuarioRepo.createUsuario(
                                 nombre = usuario.nombre,
                                 email = usuario.email,
@@ -135,6 +136,9 @@ fun UsuariosPanelView(
                                 admin = usuario.admin
                             )
                             viewModel.fetchUsuarios()
+                        }else{
+                            println("Ya existe un usuario con ese email")
+                            }
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -187,8 +191,8 @@ fun DialogAgregarEditarUsuario(
 ) {
     var nombre by remember { mutableStateOf(usuarioInicial?.nombre ?: "") }
     var email by remember { mutableStateOf(usuarioInicial?.email ?: "") }
-    var password by remember { mutableStateOf(usuarioInicial?.password?: "") }
-    var admin by remember { mutableStateOf(usuarioInicial?.admin ?: "") }
+    var password by remember { mutableStateOf(usuarioInicial?.password ?: "") }
+    var admin by remember { mutableStateOf(usuarioInicial?.admin ?: false) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -203,25 +207,31 @@ fun DialogAgregarEditarUsuario(
                     label = { Text("Nombre") },
                     modifier = Modifier.fillMaxWidth()
                 )
+
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
                     label = { Text("Email") },
                     modifier = Modifier.fillMaxWidth()
                 )
+
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
                     label = { Text("Contraseña") },
                     modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(
-                    value = admin.toString(),
-                    onValueChange = { admin = it },
-                    label = { Text("Admin?") },
-                    modifier = Modifier.fillMaxWidth()
-                )
 
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    Checkbox(
+                        checked = admin,
+                        onCheckedChange = { admin = it }
+                    )
+                    Text("Administrador")
+                }
             }
         },
         confirmButton = {
@@ -232,14 +242,13 @@ fun DialogAgregarEditarUsuario(
                             nombre = nombre.trim(),
                             email = email.trim(),
                             password = password,
-                            admin = admin as Boolean
+                            admin = admin
                         ) ?: Usuario(
                             nombre = nombre.trim(),
                             email = email.trim(),
                             password = password,
-                            admin = admin as Boolean
+                            admin = admin
                         )
-
                     )
                 }
             }) {

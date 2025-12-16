@@ -43,16 +43,29 @@ class LoginViewModel(val usuarioRepo: UsuarioRepository): ViewModel(){
 
     fun login(correo: String, contrasena: String, onSuccess: (Usuario) -> Unit) {
         viewModelScope.launch {
-            Log.d("Login", "Intento login: $correo / $contrasena")
-            val usuario = usuarioRepo.login(correo)
-            Log.d("Login", "Usuario encontrado: $usuario")
-            if (usuario != null && usuario.password == contrasena) {
-                _error.postValue(false)
-                onSuccess(usuario)
-            } else {
-                _error.postValue(true)
+            if(emailInList(correo)) {
+                val usuario = usuarioRepo.login(correo)
+                Log.d("Login", "Usuario encontrado: $usuario")
+                if (usuario != null && usuario.password == contrasena) {
+                    _error.postValue(false)
+                    onSuccess(usuario)
+                } else {
+                    _error.postValue(true)
+                }
             }
+            _error.postValue((true))
         }
+    }
+
+    fun emailInList(correo : String) : Boolean{
+        usuarioList.value.forEach { usuario ->
+            if(usuario.email == correo){
+                return true;
+            }
+
+        }
+        return false
+
     }
 
     fun getByIdUser(idUsuario: Long?) {

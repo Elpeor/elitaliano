@@ -32,6 +32,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ratatin.elitaliano.viewmodels.LoginViewModel
+import com.ratatin.elitaliano.viewmodels.LoginViewModelFactory
 import com.ratatin.elitaliano.viewmodels.RegistroViewModel
 import com.ratatin.elitaliano.viewmodels.RegistroViewModelFactory
 import kotlin.let
@@ -42,10 +44,12 @@ fun RegistroView(
     onBackToLogin: () -> Unit,
     onUserCreated: (Long?) -> Unit
 ) {
-    val context = LocalContext.current
 
-    val viewModel: RegistroViewModel = viewModel(
-        factory = RegistroViewModelFactory(context)
+    val registroViewModel: RegistroViewModel = viewModel(
+        factory = RegistroViewModelFactory()
+    )
+    val loginViewModel : LoginViewModel = viewModel(
+        factory = LoginViewModelFactory()
     )
 
     var nombre by remember { mutableStateOf("") }
@@ -53,10 +57,9 @@ fun RegistroView(
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    val error by viewModel.error.observeAsState("")
-    val usuarioCreado by viewModel.registroExitoso.observeAsState(null)
+    val error by registroViewModel.error.observeAsState("")
+    val usuarioCreado by registroViewModel.registroExitoso.observeAsState(null)
 
-    // Si el usuario fue creado, devolvemos el id
     usuarioCreado?.let { id ->
         if (id > 0) {
             onUserCreated(id)
@@ -115,7 +118,11 @@ fun RegistroView(
 
         Button(
             onClick = {
-                viewModel.registrarUsuario(nombre, correo, password)
+                if(!loginViewModel.emailInList(correo)) {
+                    registroViewModel.registrarUsuario(nombre, correo, password)
+                }else{
+                    println("Ya existe un usuario con ese correo")
+                }
             },
             modifier = Modifier.fillMaxWidth(0.8f)
         ) {
